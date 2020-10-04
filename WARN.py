@@ -1,8 +1,9 @@
+"""
+WARN原版网络，14W参数
+"""
+
 import tensorflow as tf
-import numpy as np
 
-
-# WARN原版网络，14W参数
 
 def resblock(temp_tensor, convId, weights):
     out_tensor = None

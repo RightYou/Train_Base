@@ -3,3 +3,4 @@ Test_Function.py
 samples/
 logs/
 checkpoints/
+__pycache__/

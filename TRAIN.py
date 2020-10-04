@@ -7,10 +7,10 @@ from UTILS import *
 tf.logging.set_verbosity(tf.logging.WARN)
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-EXP_DATA = 'WARN_14w_QP47-56_200810'  # naming model
+EXP_DATA = 'WARN_14w_QP47-56_201004_test'  # naming model
 
-LOW_DATA_PATH = r"E:\0WZY\Data_Set\Train_Set\av1_deblock_nocdefLr"  # The path where data is stored
-HIGH_DATA_PATH = r"E:\0WZY\Data_Set\Train_Set\div2k_train_hr_yuv"  # The path where label is stored
+LOW_DATA_PATH = r"F:\0wzy_Data\train_set\av1_deblock_nocdefLr"  # The path where data is stored
+HIGH_DATA_PATH = r"F:\0wzy_Data\train_set\div2k_train_hr_yuv"  # The path where label is stored
 
 LOG_PATH = "./logs/%s/" % EXP_DATA
 CKPT_PATH = "./checkpoints/%s/" % EXP_DATA  # Store the trained models
@@ -23,6 +23,8 @@ BASE_LR = 1e-3  # Base learning rate
 LR_DECAY_RATE = 0.5
 LR_DECAY_STEP = 50
 MAX_EPOCH = 500
+QP_START = 47
+QP_END = 56
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path")
@@ -45,7 +47,7 @@ model_path = args.model_path
 
 if __name__ == '__main__':
     start = time.time()
-    train_list = get_train_list(load_file_list(LOW_DATA_PATH), load_file_list(HIGH_DATA_PATH))
+    train_list = get_train_list(load_file_list(LOW_DATA_PATH), load_file_list(HIGH_DATA_PATH), QP_START, QP_END)
     print(len(train_list))
 
     with tf.name_scope('input_scope'):

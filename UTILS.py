@@ -7,14 +7,13 @@ import tensorflow as tf
 from PIL import Image
 
 # 训练普通模型的时候改成TRAIN就好了
-# from TRAIN_CRLC import BATCH_SIZE
-# from TRAIN_CRLC import PATCH_SIZE
+from TRAIN import BATCH_SIZE
+from TRAIN import PATCH_SIZE
 
 
-# 环内测试可能递归加载TRAIN_CRLC，所以直接将BATCH_SIZE和PATCH_SIZE直接赋值在这里
-PATCH_SIZE = (64, 64)
-BATCH_SIZE = 64
-
+# 环内测试可能递归加载TRAIN，所以直接将BATCH_SIZE和PATCH_SIZE直接赋值在这里
+# PATCH_SIZE = (64, 64)
+# BATCH_SIZE = 64
 
 # 截断，将输入控制在min和max中，加_用于与方法区分
 def truncate(input_, min_, max_):
@@ -59,7 +58,7 @@ def load_file_list(directory):
 
 
 # 获取训练集
-def get_train_list(low_list, high_list):
+def get_train_list(low_list, high_list, qp_start, qp_end):
     train_list = []
     # method 1：单QP训练，并获取指定index范围内的数据
     # 使用断言，如果训练集数据和标签长度不一样，触发异常，并不适用于多qp重建图像，共用一组label的情况
@@ -70,13 +69,31 @@ def get_train_list(low_list, high_list):
     #         train_list.append([low_list[i], high_list[i]])
 
     # method 2：范围QP训练，yuv文件上层目录名需为 qpxx
-    assert len(low_list) % len(high_list) == 0, "low:%d, high:%d" % (len(low_list), len(high_list))
+    assert len(low_list) % len(high_list) == 0, "low:%d, high:%d 数据与标签不等" % (len(low_list), len(high_list))
     for i in range(len(low_list)):
-        qp = int(low_list[i].split("\\")[-2].split("QP")[-1])
-        if 47 <= qp <= 56:
+        qp = int(low_list[i].split("\\")[-2].split("qp")[-1])
+        if qp_start <= qp <= qp_end:
             train_list.append([low_list[i], high_list[i % len(high_list)]])
 
     return train_list
+
+
+# 获取测试集，测试集一般使用一个QP，训练是多QP的
+def get_test_list(low_list, high_list):
+    test_list = []
+    # method 1：单QP测试
+    assert len(low_list) == len(high_list), "low:%d, high:%d 数据与标签不等" % (len(low_list), len(high_list))
+    for i in range(len(low_list)):
+        test_list.append([low_list[i], high_list[i]])
+
+    # method 2：范围QP测试，yuv文件上层目录名需为 QPxx
+    # assert len(low_list) % len(high_list) == 0, "low:%d, high:%d" % (len(low_list), len(high_list))
+    # for i in range(len(low_list)):
+    #     qp = int(low_list[i].split("\\")[-2].split("QP")[-1])
+    #     if 47 <= qp <= 56:
+    #         test_list.append([low_list[i], high_list[i % len(high_list)]])
+
+    return test_list
 
 
 # 传入图片的绝对路径，通过字符串切割，返回图片的宽高。
