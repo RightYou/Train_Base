@@ -1,13 +1,13 @@
 import argparse
 import time
 from random import shuffle
-from WARN import model
+from Octave.testModel import model
 from UTILS import *
 
 tf.logging.set_verbosity(tf.logging.WARN)
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-EXP_DATA = 'WARN_14w_QP47-56_201004_test'  # naming model
+EXP_DATA = 'Octave_14w_QP47-56_201006_test'  # naming model
 
 LOW_DATA_PATH = r"F:\0wzy_Data\train_set\av1_deblock_nocdefLr"  # The path where data is stored
 HIGH_DATA_PATH = r"F:\0wzy_Data\train_set\div2k_train_hr_yuv"  # The path where label is stored

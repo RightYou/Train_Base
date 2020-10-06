@@ -3,7 +3,7 @@ import sys
 if not hasattr(sys, 'argv'):
     sys.argv = ['']
 
-from WARN import model as model
+from Octave.testModel import model as model
 from UTILS import *
 
 tplt1 = "{0:^30}\t{1:^10}\t{2:^10}\t{3:^10}\t{4:^10}"  # \t{4:^10}\t{5:^10}
@@ -47,7 +47,7 @@ def prepare_test_data(fileOrDir):
     elif len(fileOrDir) == 2:
 
         fileName_list = load_file_list(fileOrDir[0])
-        test_list = get_train_list(load_file_list(fileOrDir[0]), load_file_list(fileOrDir[1]))
+        test_list = get_test_list(load_file_list(fileOrDir[0]), load_file_list(fileOrDir[1]))
         for pair in test_list:
             filesize = os.path.getsize(pair[0])
             picsize = get_w_h(pair[0])[0] * get_w_h(pair[0])[0] * 3 // 2
@@ -152,8 +152,8 @@ def test_all_ckpt(modelPath):
         cur_ckpt_psnr_sum = 0
         epoch = int(ckpt.split('.')[0].split('_')[-2])
 
-        if epoch != 279:
-            continue
+        # if epoch != 279:
+        #     continue
 
         print(os.path.join(modelPath, ckpt))
         predictor = Predict(model, os.path.join(modelPath, ckpt))
@@ -183,4 +183,4 @@ def test_all_ckpt(modelPath):
 
 
 if __name__ == '__main__':
-    test_all_ckpt(r"I:\WZY\2号\Train_Base\checkpoints\RWARN_14w_QP47-56_200810")
+    test_all_ckpt(r"F:\4wzy\桌面杂项\新建文件夹\Train_Base\checkpoints\Octave_14w_QP47-56_201004_test")
